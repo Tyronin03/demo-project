@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+      - develop
+      - staging
 
 jobs:
   create-release:
@@ -10,10 +12,23 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+    #Added dynamic environment branches
+      - name: Set Environment Variables
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+            echo "TAG_NAME=v${{ github.run_number }}.0.0" >> $GITHUB_ENV
+            echo "RELEASE_NAME=Production Release v${{ github.run_number }}.0.0" >> $GITHUB_ENV
+          elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
+            echo "TAG_NAME=v${{ github.run_number }}.0.0-dev" >> $GITHUB_ENV
+            echo "RELEASE_NAME=Release Candidate v1.0.0-rc" >> $GITHUB_ENV
+          elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
+            echo "TAG_NAME=v${{ github.run_number }}.0.0-staging" >> $GITHUB_ENV
+            echo "RELEASE_NAME=Staging Release v${{ github.run_number }}.0.0-staging" >> $GITHUB_ENV
+          fi
+      #- name: Setup Node.js
+      #  uses: actions/setup-node@v2
+      #  with:
+      #    node-version: '14'
       #- name: Create Release Notes
       # run: echo "Release Notes: Automated release triggered by pull request merge" > release_notes.txt
       - name: Create Release
@@ -21,8 +36,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 'v${{ github.run_number }}.0.0'
-          release_name: 'Release v${{ github.run_number }}.0.0'
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: ${{ env.RELEASE_NAME }}
+          #tag_name: 'v${{ github.run_number }}.0.0'
+          #release_name: 'Release v${{ github.run_number }}.0.0'
           body: ${{ steps.checkout.outputs.release_notes }}
           draft: false
           prerelease: false
