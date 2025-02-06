@@ -16,14 +16,14 @@ jobs:
       - name: Set Environment Variables
         run: |
           if [ "${{ github.ref }}" == "refs/heads/master" ]; then
-            echo "TAG_NAME=v1.0.0" >> $GITHUB_ENV
-            echo "RELEASE_NAME=Production Release v1.0.0" >> $GITHUB_ENV
+            echo "TAG_NAME=v${{ github.run_number }}.0.0" >> $GITHUB_ENV
+            echo "RELEASE_NAME=Production Release v${{ github.run_number }}.0.0" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
-            echo "TAG_NAME=v1.0.0-dev" >> $GITHUB_ENV
+            echo "TAG_NAME=v${{ github.run_number }}.0.0-dev" >> $GITHUB_ENV
             echo "RELEASE_NAME=Release Candidate v1.0.0-rc" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
-            echo "TAG_NAME=v1.0.0-beta" >> $GITHUB_ENV
-            echo "RELEASE_NAME=Staging Release v1.0.0-beta" >> $GITHUB_ENV
+            echo "TAG_NAME=v${{ github.run_number }}.0.0-staging" >> $GITHUB_ENV
+            echo "RELEASE_NAME=Staging Release v${{ github.run_number }}.0.0-staging" >> $GITHUB_ENV
           fi
       #- name: Setup Node.js
       #  uses: actions/setup-node@v2
