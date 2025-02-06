@@ -17,8 +17,8 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Create Release Notes
-        run: echo "Release Notes: Automated release triggered by pull request merge" > release_notes.txt
+      #- name: Create Release Notes
+      # run: echo "Release Notes: Automated release triggered by pull request merge" > release_notes.txt
 
       - name: Create Release
         uses: actions/create-release@v1
