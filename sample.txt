@@ -2,3 +2,4 @@ This is a sample file
 Second line
 ThirdLine
 4thline
+Test release notes
